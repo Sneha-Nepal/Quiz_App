@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Question</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .quiz-card {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        .quiz-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .score-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 1.1rem;
+        }
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin: 30px 0 25px 0;
+            text-align: center;
+        }
+        .answer-options {
+            display: grid;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        .option-button {
+            text-align: left;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            background-color: white;
+            color: #333;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .option-button:hover {
+            border-color: #667eea;
+            background-color: #f0f4ff;
+            transform: translateX(5px);
+        }
+        .option-button:focus {
+            border-color: #667eea;
+            background-color: #f0f4ff;
+            box-shadow: none;
+        }
+        .option-button.selected {
+            border-color: #667eea;
+            background-color: #667eea;
+            color: white;
+        }
+        .feedback-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .feedback-correct {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .feedback-wrong {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .feedback-fast {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+        .progress-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Quiz Card -->
+        <div class="card quiz-card">
+            <!-- Header with Gradient -->
+            <div class="quiz-header">
+                <h1>🎯 Quiz Challenge</h1>
+                <div class="score-badge">
+                    Question {{ q_num }}/{{ total }} • Score: {{ current_score }} pts
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ (q_num / total) * 100 }}%;" 
+                             aria-valuenow="{{ q_num }}" aria-valuemin="0" aria-valuemax="{{ total }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Message -->
+                {% if feedback %}
+                    <div class="feedback-box {% if '❌' in feedback %}feedback-wrong{% elif '⚡' in feedback %}feedback-fast{% else %}feedback-correct{% endif %}">
+                        {{ feedback }}
+                    </div>
+                {% endif %}
+
+                <!-- Question Text -->
+                <p class="question-text">{{ question.text }}</p>
+
+                <!-- Quiz Answer Form -->
+                <form action="/quiz" method="POST" id="quizForm">
+                    <div class="answer-options">
+                        {% for option in question.options %}
+                            <label class="option-button" onclick="selectOption(this)">
+                                <input type="radio" name="option" value="{{ option }}" style="margin-right: 10px;" required>
+                                {{ option }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary submit-btn">Submit Answer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectOption(label) {
+            // Remove selected class from all labels
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            // Add selected class to clicked label
+            label.classList.add('selected');
+            // Check the radio button
+            const radio = label.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+
+        // Restore selected state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkedInput = document.querySelector('input[type="radio"]:checked');
+            if (checkedInput) {
+                checkedInput.closest('.option-button').classList.add('selected');
+            }
+        });
+    </script>
+</body>
+</html>
