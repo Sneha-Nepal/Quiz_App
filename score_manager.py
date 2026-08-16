@@ -2,7 +2,6 @@ import csv
 
 FILENAME = "high_scores.csv"
 
-
 def load_scores():
     """Reads CSV and returns a dict mapping user names to their integer high score."""
     scores = {}

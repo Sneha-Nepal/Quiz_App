@@ -1,0 +1,1 @@
+Quiz_App is a Python-based application that fetches questions from an external API, tracks player scores in a CSV file, and utilizes Object-Oriented Programming (OOP) principles like encapsulation and inheritance.

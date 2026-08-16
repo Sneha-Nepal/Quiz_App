@@ -11,7 +11,7 @@ from flask import (
 from data import fetch_questions
 from question_model import Question
 
-app = Flask(__name__)           # Creates a flask object. __name__ tells the where to look for templetes files
+app = Flask(__name__)                           # Creates a flask object. __name__ tells the where to look for templetes files
 app.secret_key = "super_secret_quiz_key"        # Usually hidden but fine here for now
 
 
