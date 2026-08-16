@@ -98,7 +98,7 @@ def quiz():
         # Moves to next question, gives feedback, and redirects to the quiz page for looping the process
         session["question_number"] += 1
         session["feedback"] = feedback  
-        return redirect(url_for("quiz"))        # New request
+        return redirect(url_for("quiz"))        # Redirects to /quiz until last question
 
     # Track time when user GETs the quesion i.e. the start_time
     session["start_time"] = time.time()

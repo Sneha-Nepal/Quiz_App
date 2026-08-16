@@ -3,7 +3,7 @@ import random
 import requests
 
 
-def fetch_questions(amount=10, category=18, difficulty="medium"):
+def fetch_questions(amount=10, category=18, difficulty="easy"):
     """Fetches MCQ questions from OpenTDB API and formats them as standard dictionaries."""
     url = f"https://opentdb.com/api.php?amount={amount}&category={category}&difficulty={difficulty}&type=multiple"
 
