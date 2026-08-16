@@ -40,10 +40,10 @@ I was assisted with AI, then went through it line by line until I actually under
 * Understood the difference between an HTTP-level failure (bad status code) and an API-level failure (valid response, but no results).
 * Learned to treat API calls as unreliable by nature and always planning for empty results or network failures rather than assuming a clean response every time.
 
-## File I/O with CSV
+### File I/O with CSV
  
 Used Python's `csv` module to read and write a `high_scores.csv` file, handling first-time players, updated records, and building a sorted leaderboard from it.
  
-## Jinja Templating
+### Jinja Templating
  
 Used `{% if %}`, `{% for %}`, and `url_for()` inside HTML templates to render dynamic content — like the current question, live feedback, and the leaderboard table — without hardcoding anything.
