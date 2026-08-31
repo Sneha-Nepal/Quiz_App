@@ -1,0 +1,5 @@
+venv/
+__pycache__/
+
+# Hide API key
+secret.py
